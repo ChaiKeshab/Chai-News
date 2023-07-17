@@ -1,17 +1,10 @@
 import { useState, useEffect } from 'react'
 import scrollTop from '../Images/scrollToTop.svg'
+import PropTypes from 'prop-types'
 import './ScrollUp.css'
 
-export default function ScrollUp() {
+export default function ScrollUp(props) {
     const [isVisible, setIsVisible] = useState(true)
-
-    const scrollToTop = () => {
-        window.scrollTo({
-            top: 10,
-            left: 0,
-            behavior: 'smooth',
-        });
-    }
 
     useEffect(() => {
         const handleScroll = () => {
@@ -20,8 +13,7 @@ export default function ScrollUp() {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
 
             if (winScroll > heightToHideFrom) {
-                isVisible &&      // to limit setting state only the first time
-                    setIsVisible(false);
+                isVisible && setIsVisible(false);
             } else {
                 setIsVisible(true);
             }
@@ -34,8 +26,12 @@ export default function ScrollUp() {
     }, [isVisible])
 
     return (
-        <div className={`top ${isVisible ? 'hide' : 'show'}`} onClick={() => scrollToTop()}>
-            <img src={scrollTop} onClick={() => scrollToTop()} className='to-top' alt='To Top' />
+        <div className={`top ${isVisible ? 'hide' : 'show'}`} onClick={() => props.scrollToTop()}>
+            <img src={scrollTop} onClick={() => props.scrollToTop()} className='to-top' alt='To Top' />
         </div>
     )
+}
+
+ScrollUp.propTypes = {
+    scrollToTop: PropTypes.func.isRequired
 }

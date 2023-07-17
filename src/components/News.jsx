@@ -62,6 +62,7 @@ const News = (props) => {
                 });
         };
         getRequestNews()
+        scrollToTop()
     }, [getNews, lang, qSearch, topic])
 
     const fetchMoreData = async () => {
@@ -124,6 +125,14 @@ const News = (props) => {
         }
     }
 
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 10,
+            left: 0,
+            behavior: 'smooth',
+        });
+    }
+
     const currentDate = new Date();
     const format = { weekday: 'long', month: 'long', day: 'numeric' };
     const formatDate = currentDate.toLocaleDateString('en-US', format);
@@ -166,7 +175,7 @@ const News = (props) => {
                         ) : <div className='no-item'></div>}
                     </InfiniteScroll>
                 </div>
-                <ScrollUp />
+                <ScrollUp scrollToTop={scrollToTop}/>
             </div>
         </>
     );
