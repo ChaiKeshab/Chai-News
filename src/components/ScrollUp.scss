@@ -1,0 +1,45 @@
+.top {
+    display: block;
+    position: fixed;
+    right: 6.5vw;
+    bottom: var(--bottom);
+    width: 30px;
+    height: 30px;
+    border: 1px solid #D1D1D1;
+    border-radius: 50%;
+    background-color: #D1D1D1;
+    text-align: center;
+
+    transition: auto 0.3s, bottom 0.3s;
+    transform-origin: 50% 50%;
+
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.2);
+    }
+    
+    .to-top {
+        width: 50%;
+        height: 50%;
+        transform: translate(0, 25%);
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .top {
+        right: 1vw;
+
+        &:hover {
+            transform: none;
+        }
+    }
+}
+@media (max-width: 768px) {
+    .top {
+        right: 5vw;
+    }
+}
