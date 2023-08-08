@@ -16,26 +16,68 @@ const News = (props) => {
     const [pageNo, setPageNo] = useState(2)
     const [totalResults, setTotalResults] = useState(0)
 
-
     const { getNews, qSearch, topic, lang } = props;
     useEffect(() => {
         const getRequestNews = async () => {
-            setProgress((value) => value + 20)
+            try {
+                setProgress((value) => value + 20);
+                const apiUrl = `https://api.newscatcherapi.com/v2/${getNews}`;
+
+                const params = {
+                    page_size: 50,
+                    page: 1,
+                };
+
+                if (getNews === 'search') {
+                    params.q = qSearch;
+                    params.sort_by = 'relevancy';
+                    params.topic = topic;
+                }
+                else if (getNews === 'latest_headlines') {
+                    params.lang = lang;
+                    params.topic = topic;
+                }
+
+                const format = {
+                    method: 'GET',
+                    url: apiUrl,
+                    params: params,
+                    headers: {
+                        'x-api-key': import.meta.env.VITE_API,
+                    },
+                };
+
+                const response = await axios.request(format);
+                setProgress((value) => value + 40);
+                setArticles(response.data.articles);
+                setTotalResults(response.data.total_hits);
+                setProgress(100);
+            } catch (error) {
+                console.error(error);
+                setProgress(100);
+            }
+        };
+        getRequestNews();
+        scrollToTop();
+    }, [getNews, lang, qSearch, topic]);
+
+    const fetchMoreData = async () => {
+        setPageNo((page) => page + 1)
+        try {
             const apiUrl = `https://api.newscatcherapi.com/v2/${getNews}`;
 
             const params = {
                 page_size: 50,
-                page: 1,
+                page: pageNo,
+                topic: topic,
             };
 
             if (getNews === 'search') {
                 params.q = qSearch;
                 params.sort_by = 'relevancy';
-                params.topic = topic;
             }
             else if (getNews === 'latest_headlines') {
                 params.lang = lang;
-                params.topic = topic;
             }
 
             const format = {
@@ -47,62 +89,13 @@ const News = (props) => {
                 },
             };
 
-            await axios
-                .request(format)
-                .then((response) => {
-                    setProgress((value) => value + 40)
-                    setArticles(response.data.articles);
-                    setTotalResults(response.data.total_hits);
-                    setProgress(100)
-                })
-                .catch((error) => {
-                    // setArticles(exdata.articles);
-                    console.error(error);
-                    setProgress(100)
-                });
-        };
-        getRequestNews()
-        scrollToTop()
-    }, [getNews, lang, qSearch, topic])
-
-    const fetchMoreData = async () => {
-        setPageNo((page) => page + 1)
-        const apiUrl = `https://api.newscatcherapi.com/v2/${getNews}`;
-
-        const params = {
-            page_size: 50,
-            page: pageNo,
-        };
-
-        if (getNews === 'search') {
-            params.q = qSearch;
-            params.sort_by = 'relevancy';
-            params.topic = topic;
+            const response = await axios.request(format)
+            setArticles((data) => data.concat(response.data.articles));
+            setTotalResults(response.data.total_hits);
+        } catch (error) {
+            // setArticles(exdata.articles);
+            console.error(error);
         }
-        else if (getNews === 'latest_headlines') {
-            params.lang = lang;
-            params.topic = topic;
-        }
-
-        const format = {
-            method: 'GET',
-            url: apiUrl,
-            params: params,
-            headers: {
-                'x-api-key': import.meta.env.VITE_API,
-            },
-        };
-
-        await axios
-            .request(format)
-            .then((response) => {
-                setArticles((data) => data.concat(response.data.articles));
-                setTotalResults(response.data.total_hits);
-            })
-            .catch((error) => {
-                // setArticles(exdata.articles);
-                console.error(error);
-            });
     };
 
     const formattedDate = (dateString) => {
@@ -163,7 +156,7 @@ const News = (props) => {
                             articles.map((element, index) => (
                                 <div className="container-news" key={`${element._id}${index}`}>
                                     <NewsItem
-                                        title={element.title ? element.title : console.log(element.title)}
+                                        title={element.title}
                                         link={element.link}
                                         media={element.media ? element.media : zoro}
                                         postDate={formattedDate(element.published_date)}
@@ -175,7 +168,7 @@ const News = (props) => {
                         ) : <div className='no-item'></div>}
                     </InfiniteScroll>
                 </div>
-                <ScrollUp scrollToTop={scrollToTop}/>
+                <ScrollUp scrollToTop={scrollToTop} />
             </div>
         </>
     );
@@ -191,7 +184,7 @@ News.propTypes = {
 
 News.defaultProps = {
     qSearch: "*",
-    topic: "all",
+    topic: "null",
     topText: "Latest Headlines",
     getNews: 'latest_headlines',
     lang: "en"
