@@ -16,9 +16,9 @@ This app utilizes the News Catcher API for fetching news data. The News Catcher 
 
 To run the CHAI News app locally, follow these steps:
 
-1. Clone the repository: `git clone <repository-url>`
-2. Install the dependencies: `npm install`
-3. Start the development server: `npm start`
+1. Clone the repository: `git clone https://github.com/ChaiKeshab/Chai-News.git`
+2. Compile Scss files to css: `Live Sass Compiler` or any other preferred method.
+3. Start the development server: `npm run dev`
 
 Make sure you have Node.js and npm installed on your machine.
 
@@ -27,3 +27,8 @@ Make sure you have Node.js and npm installed on your machine.
 - React.js: JavaScript library for building user interfaces.
 - Axios: Promise-based HTTP client for making API requests.
 - SCSS: Styling the app for an enhanced user experience.
+
+## Packages Used
+- Infinite Scroll: `npm i react-infinite-scroll-component`
+- Top loading bar: `npm i react-top-loading-bar`
+
