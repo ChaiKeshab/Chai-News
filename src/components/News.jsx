@@ -7,6 +7,7 @@ import axios from 'axios'
 import ScrollUp from './ScrollUp';
 import PropTypes from 'prop-types'
 import LoadingBar from 'react-top-loading-bar'
+
 // import exdata from './example2.json'
 
 const News = (props) => {
@@ -15,27 +16,28 @@ const News = (props) => {
     const [articles, setArticles] = useState([])
     const [pageNo, setPageNo] = useState(2)
     const [totalResults, setTotalResults] = useState(0)
+    const [count, setCount] = useState(0)
 
     const { getNews, qSearch, topic, lang } = props;
     useEffect(() => {
         const getRequestNews = async () => {
             try {
+                const apiKey = await import.meta.env.VITE_API;
                 setProgress((value) => value + 20);
                 const apiUrl = `https://api.newscatcherapi.com/v2/${getNews}`;
 
                 const params = {
                     page_size: 50,
                     page: 1,
+                    topic: topic,
                 };
 
                 if (getNews === 'search') {
                     params.q = qSearch;
                     params.sort_by = 'relevancy';
-                    params.topic = topic;
                 }
                 else if (getNews === 'latest_headlines') {
                     params.lang = lang;
-                    params.topic = topic;
                 }
 
                 const format = {
@@ -43,8 +45,8 @@ const News = (props) => {
                     url: apiUrl,
                     params: params,
                     headers: {
-                        'x-api-key': import.meta.env.VITE_API,
-                    },
+                        'x-api-key': apiKey
+                    }
                 };
 
                 const response = await axios.request(format);
@@ -54,16 +56,20 @@ const News = (props) => {
                 setProgress(100);
             } catch (error) {
                 console.error(error);
-                setProgress(100);
+                setTimeout(() => {
+                    setCount(count + 1)
+                }, 1000);
             }
         };
         getRequestNews();
         scrollToTop();
-    }, [getNews, lang, qSearch, topic]);
+    }, [getNews, lang, qSearch, topic, count]);
 
     const fetchMoreData = async () => {
         setPageNo((page) => page + 1)
         try {
+            const apiKey = await import.meta.env.VITE_API;
+            setProgress((value) => value + 20);
             const apiUrl = `https://api.newscatcherapi.com/v2/${getNews}`;
 
             const params = {
@@ -85,15 +91,20 @@ const News = (props) => {
                 url: apiUrl,
                 params: params,
                 headers: {
-                    'x-api-key': import.meta.env.VITE_API,
+                    'x-api-key': apiKey,
                 },
             };
 
             const response = await axios.request(format)
+            setProgress((value) => value + 40);
             setArticles((data) => data.concat(response.data.articles));
             setTotalResults(response.data.total_hits);
+            setProgress(100);
         } catch (error) {
             // setArticles(exdata.articles);
+            setTimeout(() => {
+                fetchMoreData()
+            }, 1000);
             console.error(error);
         }
     };
