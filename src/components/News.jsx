@@ -8,7 +8,7 @@ import ScrollUp from './ScrollUp';
 import PropTypes from 'prop-types'
 import LoadingBar from 'react-top-loading-bar'
 
-// import exdata from './example2.json'
+// import exdata from './exampleClone.json'
 
 const News = (props) => {
 
@@ -54,7 +54,9 @@ const News = (props) => {
                 setArticles(response.data.articles);
                 setTotalResults(response.data.total_hits);
                 setProgress(100);
+
             } catch (error) {
+                // setArticles(exdata.articles);
                 console.error(error);
                 setTimeout(() => {
                     setCount(count + 1)
@@ -100,12 +102,13 @@ const News = (props) => {
             setArticles((data) => data.concat(response.data.articles));
             setTotalResults(response.data.total_hits);
             setProgress(100);
+
         } catch (error) {
             // setArticles(exdata.articles);
+            console.error(error);
             setTimeout(() => {
                 fetchMoreData()
             }, 1000);
-            console.error(error);
         }
     };
 
@@ -164,7 +167,7 @@ const News = (props) => {
                     // loader={<div>loading</div>}
                     >
                         {articles.length > 0 ? (
-                            articles.map((element, index) => (
+                            articles.filter((e, i) => (articles[i + 1]) ? e.media !== articles[i + 1].media : e).map((element, index) => (
                                 <div className="container-news" key={`${element._id}${index}`}>
                                     <NewsItem
                                         title={element.title}
