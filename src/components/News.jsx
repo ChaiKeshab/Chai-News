@@ -18,38 +18,33 @@ const News = (props) => {
     const [totalResults, setTotalResults] = useState(0)
     const [count, setCount] = useState(0)
 
-    const { getNews, qSearch, topic, lang } = props;
+    const { qSearch, topic, lang } = props;
+
     useEffect(() => {
         const getRequestNews = async () => {
             try {
                 const apiKey = await import.meta.env.VITE_API;
                 setProgress((value) => value + 20);
-                const apiUrl = `https://api.newscatcherapi.com/v2/${getNews}`;
+                const apiUrl = `https://free-news.p.rapidapi.com/v1/search`;
 
                 const params = {
                     page_size: 50,
                     page: 1,
                     topic: topic,
+                    q: qSearch,
+                    lang: lang
                 };
 
-                if (getNews === 'search') {
-                    params.q = qSearch;
-                    params.sort_by = 'relevancy';
-                }
-                else if (getNews === 'latest_headlines') {
-                    params.lang = lang;
-                }
-
-                const format = {
+                const response = await axios.request({
                     method: 'GET',
                     url: apiUrl,
                     params: params,
                     headers: {
-                        'x-api-key': apiKey
+                        "x-rapidapi-key": apiKey,
+                        "x-rapidapi-host": "free-news.p.rapidapi.com"
                     }
-                };
+                });
 
-                const response = await axios.request(format);
                 setProgress((value) => value + 40);
                 setArticles(response.data.articles);
                 setTotalResults(response.data.total_hits);
@@ -65,39 +60,32 @@ const News = (props) => {
         };
         getRequestNews();
         scrollToTop();
-    }, [getNews, lang, qSearch, topic, count]);
+    }, [lang, qSearch, topic, count]);
 
     const fetchMoreData = async () => {
         setPageNo((page) => page + 1)
         try {
             const apiKey = await import.meta.env.VITE_API;
             setProgress((value) => value + 20);
-            const apiUrl = `https://api.newscatcherapi.com/v2/${getNews}`;
+            const apiUrl = `https://free-news.p.rapidapi.com/v1/search`;
 
             const params = {
-                page_size: 50,
                 page: pageNo,
+                page_size: 50,
                 topic: topic,
+                q: qSearch,
             };
 
-            if (getNews === 'search') {
-                params.q = qSearch;
-                params.sort_by = 'relevancy';
-            }
-            else if (getNews === 'latest_headlines') {
-                params.lang = lang;
-            }
-
-            const format = {
+            const response = await axios.request({
                 method: 'GET',
                 url: apiUrl,
                 params: params,
                 headers: {
-                    'x-api-key': apiKey,
-                },
-            };
+                    "x-rapidapi-key": apiKey,
+                    "x-rapidapi-host": "free-news.p.rapidapi.com"
+                }
+            });
 
-            const response = await axios.request(format)
             setProgress((value) => value + 40);
             setArticles((data) => data.concat(response.data.articles));
             setTotalResults(response.data.total_hits);
@@ -161,12 +149,12 @@ const News = (props) => {
                 <div className="wrap">
                     <InfiniteScroll
                         className='infiniteScroll'
-                        dataLength={articles.length}
+                        dataLength={articles && articles.length}
                         next={() => fetchMoreData()}
-                        hasMore={articles.length !== totalResults}
+                        hasMore={articles && articles.length !== totalResults}
                     // loader={<div>loading</div>}
                     >
-                        {articles.length > 0 ? (
+                        {articles && articles.length > 0 ? (
                             articles.filter((e, i) => (articles[i + 1]) ? e.media !== articles[i + 1].media : e).map((element, index) => (
                                 <div className="container-news" key={`${element._id}${index}`}>
                                     <NewsItem
@@ -189,18 +177,15 @@ const News = (props) => {
 }
 
 News.propTypes = {
-    qSearch: PropTypes.string,
-    topic: PropTypes.string,
+    qSearch: PropTypes.string.isRequired,
     topText: PropTypes.string.isRequired,
-    getNews: PropTypes.string.isRequired,
-    lang: PropTypes.string.isRequired,
+    topic: PropTypes.string,
+    lang: PropTypes.string,
 }
 
 News.defaultProps = {
     qSearch: "*",
-    topic: "null",
     topText: "Latest Headlines",
-    getNews: 'latest_headlines',
     lang: "en"
 }
 

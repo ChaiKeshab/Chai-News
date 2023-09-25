@@ -47,17 +47,17 @@ export default function Navbar() {
         <div className="logo-container">
           <Link to="/" className="logo">CHAI <span>NEWS</span></Link>
         </div>
-        <img id="mobile-cta" className={`mobile-menu ${hamBar ? 'hide' : 'show'}`} src={menu} alt="Open Navigation" onClick={() => toggleHambar()} />
+        <img id="mobile-cta" className={`mobile-menu ${hamBar ? 'hide' : 'show'}`} src={menu} alt="Open Navigation" onClick={toggleHambar} />
 
         <nav>
-          <img id="mobile-exit" className={`mobile-menu-exit ${hamBar ? 'show' : 'hide'}`} src={exit} alt="Close Navigation" onClick={() => toggleHambar()} />
+          <img id="mobile-exit" className={`mobile-menu-exit ${hamBar ? 'show' : 'hide'}`} src={exit} alt="Close Navigation" onClick={toggleHambar} />
 
           <div className={`nav-div ${hamBar ? 'show' : 'hide'}`}>
 
             <ul className={`nav-one`}>
-              <li><Link to="/" onClick={() => closeMenu()} className={`${hamBar ? 'hide' : 'show'}`}>Home</Link></li>
-              <li><Link to="/chai" onClick={() => closeMenu()} className={`${hamBar ? 'hide' : 'show'}`}>Chai</Link></li>
-              <li><Link to="/anime" onClick={() => closeMenu()} className={`${hamBar ? 'hide' : 'show'}`}>Anime</Link></li>
+              <li><Link to="/" onClick={closeMenu} className={`${hamBar ? 'hide' : 'show'}`}>Home</Link></li>
+              <li><Link to="/chai" onClick={closeMenu} className={`${hamBar ? 'hide' : 'show'}`}>Chai</Link></li>
+              <li><Link to="/anime" onClick={closeMenu} className={`${hamBar ? 'hide' : 'show'}`}>Anime</Link></li>
             </ul>
 
             <div className='line-break'>
@@ -65,31 +65,31 @@ export default function Navbar() {
             </div>
 
             <ul className={`nav-two`}>
-              <li><Link to="/business" onClick={() => closeMenu()} className={`${hamBar ? 'hide' : 'show'}`}>Business</Link></li>
-              <li><Link to="/technology" onClick={() => closeMenu()} className={`${hamBar ? 'hide' : 'show'}`}>Technology</Link></li>
-              <li><Link to="/entertainment" onClick={() => closeMenu()} className={`${hamBar ? 'hide' : 'show'}`}>Entertainment</Link></li>
+              <li><Link to="/business" onClick={closeMenu} className={`${hamBar ? 'hide' : 'show'}`}>Business</Link></li>
+              <li><Link to="/technology" onClick={closeMenu} className={`${hamBar ? 'hide' : 'show'}`}>Technology</Link></li>
+              <li><Link to="/entertainment" onClick={closeMenu} className={`${hamBar ? 'hide' : 'show'}`}>Entertainment</Link></li>
             </ul>
 
             <ul className={`nav-three`}>
-              <li><Link to="/sport " onClick={() => closeMenu()} className={`${hamBar ? 'hide' : 'show'}`}>Sport </Link></li>
-              <li><Link to="/gaming" onClick={() => closeMenu()} className={`${hamBar ? 'hide' : 'show'}`}>Gaming</Link></li>
-              <li><Link to="/music" onClick={() => closeMenu()} className={`${hamBar ? 'hide' : 'show'}`}>Music</Link></li>
+              <li><Link to="/sport " onClick={closeMenu} className={`${hamBar ? 'hide' : 'show'}`}>Sport </Link></li>
+              <li><Link to="/gaming" onClick={closeMenu} className={`${hamBar ? 'hide' : 'show'}`}>Gaming</Link></li>
+              <li><Link to="/music" onClick={closeMenu} className={`${hamBar ? 'hide' : 'show'}`}>Music</Link></li>
             </ul>
 
             <ul className={`nav-four`}>
-              <li><Link to="/beauty" onClick={() => closeMenu()} className={`${hamBar ? 'hide' : 'show'}`}>Beauty</Link></li>
-              <li><Link to="/science" onClick={() => closeMenu()} className={`${hamBar ? 'hide' : 'show'}`}>Science</Link></li>
-              <li><Link to="/food" onClick={() => closeMenu()} className={`${hamBar ? 'hide' : 'show'}`}>Food</Link></li>
+              <li><Link to="/beauty" onClick={closeMenu} className={`${hamBar ? 'hide' : 'show'}`}>Beauty</Link></li>
+              <li><Link to="/science" onClick={closeMenu} className={`${hamBar ? 'hide' : 'show'}`}>Science</Link></li>
+              <li><Link to="/food" onClick={closeMenu} className={`${hamBar ? 'hide' : 'show'}`}>Food</Link></li>
             </ul>
           </div>
 
           <div className='ellipsis-container'>
-            <img className={`ellipsis ${hamBar ? 'hide' : 'show'}`} src={ellipsis} alt="Open Navigation" onClick={() => toggleHambar()} />
+            <img className={`ellipsis ${hamBar ? 'hide' : 'show'}`} src={ellipsis} alt="Open Navigation" onClick={toggleHambar} />
           </div>
 
           <div className='sun-moon'>
-            <img className={`sun ${mode ? 'show' : 'hide'}`} onClick={() => toggleMode()} src={sun} alt="Dark Mode" />
-            <img className={`moon ${mode ? 'hide' : 'show'}`} onClick={() => toggleMode()} src={moon} alt="Light Mode" />
+            <img className={`sun ${mode ? 'show' : 'hide'}`} onClick={toggleMode} src={sun} alt="Dark Mode" />
+            <img className={`moon ${mode ? 'hide' : 'show'}`} onClick={toggleMode} src={moon} alt="Light Mode" />
           </div>
         </nav>
       </div>

@@ -26,8 +26,8 @@ export default function ScrollUp(props) {
     }, [isVisible])
 
     return (
-        <div className={`top ${isVisible ? 'hide' : 'show'}`} onClick={() => props.scrollToTop()}>
-            <img src={scrollTop} onClick={() => props.scrollToTop()} className='to-top' alt='To Top' />
+        <div className={`top ${isVisible ? 'hide' : 'show'}`} onClick={props.scrollToTop}>
+            <img src={scrollTop} onClick={props.scrollToTop} className='to-top' alt='To Top' />
         </div>
     )
 }
